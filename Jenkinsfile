@@ -1,14 +1,9 @@
 node {
-    env.PATH = "${tool 'NodeJS'}/bin:${env.PATH}"
     def dockerImage = 'node:lts-buster-slim'
-
-    stage('Checkout') {
-        checkout scm
-    }
 
     stage('Build') {
         docker.image(dockerImage).inside('-p 3000:3000') {
-            env.CI = 'true'
+            checkout scm
             sh 'npm install'
         }
     }
