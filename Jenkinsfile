@@ -13,7 +13,7 @@ node {
     }
 
     stage('Test') {
-        sh './jenkins/scripts/test.sh'
+        sh "docker run --rm -v ${workspace}:/app -w /app ${dockerImage} ./jenkins/scripts/test.sh"
     }
 
     stage('Deliver') {
