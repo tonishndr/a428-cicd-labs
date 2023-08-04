@@ -7,13 +7,15 @@ node {
 
     stage('Build') {
         docker.image(dockerImage).inside('-p 3000:3000') {
-        env.CI = 'true'
-        sh 'npm install'
+            env.CI = 'true'
+            sh 'npm install'
         }
     }
 
     stage('Test') {
-        sh "docker run --rm -v ${workspace}:/app -w /app ${dockerImage} ./jenkins/scripts/test.sh"
+        docker.image(dockerImage).inside('-p 3000:3000') {
+            sh './jenkins/scripts/test.sh'
+        }
     }
 
     stage('Deliver') {
