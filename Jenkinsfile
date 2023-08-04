@@ -1,19 +1,30 @@
-node {
-    docker.image('node:16-buster-slim').inside('-p 3000:3000') { 
-
+pipeline {
+    agent {
+        docker {
+            image 'node:lts-buster-slim'
+            args '-p 3000:3000'
+        }
+    }
+    environment {
+        CI = 'true'
+    }
+    stages {
         stage('Build') {
-            checkout scm
-            sh 'npm install'
+            steps {
+                sh 'npm install'
+            }
         }
-
         stage('Test') {
-            sh './jenkins/scripts/test.sh'
+            steps {
+                sh './jenkins/scripts/test.sh'
+            }
         }
-
         stage('Deliver') {
-            sh './jenkins/scripts/deliver.sh'
-            input message: 'Finished using the website? (Click "Proceed" to continue)'
-            sh './jenkins/scripts/kill.sh'
+            steps {
+                sh './jenkins/scripts/deliver.sh'
+                input message: 'Finished using the website? (Click "Proceed" to continue)'
+                sh './jenkins/scripts/kill.sh'
+            }
         }
     }
 }
