@@ -11,6 +11,7 @@ cat .pidfile
 if [ -f .pidfile ]; then
     set -x
     kill $(cat .pidfile)
+    rm .pidfile
 else
     echo "File .pidfile not found. The process may have already terminated."
 fi
