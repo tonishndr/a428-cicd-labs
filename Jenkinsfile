@@ -1,4 +1,5 @@
 node {
+    env.PATH = "${tool 'NodeJS'}/bin:${env.PATH}"
     def dockerImage = 'node:lts-buster-slim'
 
     stage('Checkout') {
